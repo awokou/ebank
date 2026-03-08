@@ -27,8 +27,8 @@
 
 03) Construire et lancer le projet avec Maven
 
-    	- mvn clean install
-      - mvn spring-boot:run
+    	 mvn clean install
+       mvn spring-boot:run
 
 04) Configurer la base de données (Modifiez le fichier application.yml pour adapter vos paramètres PostgreSQL)
     	
