@@ -1,7 +1,7 @@
 package com.server.api.ebank.service;
 
-import com.server.api.ebank.dto.HistoryResponse;
-import com.server.api.ebank.entity.User;
+import com.server.api.ebank.domain.dto.response.HistoryResponse;
+import com.server.api.ebank.domain.entity.User;
 
 import java.util.List;
 

@@ -1,23 +1,20 @@
 package com.server.api.ebank.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.server.api.ebank.entity.User;
+import com.server.api.ebank.domain.entity.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.io.Serial;
 import java.util.Collection;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final Integer id;
     private final String name;
@@ -31,7 +28,7 @@ public class CustomUserDetails implements UserDetails {
 
     public static CustomUserDetails build(User user) {
 
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRoles().name()));
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()));
 
         return new CustomUserDetails(
                 user.getId(),

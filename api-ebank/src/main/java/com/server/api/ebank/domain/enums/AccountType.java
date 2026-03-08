@@ -1,4 +1,4 @@
-package com.server.api.ebank.entity.enums;
+package com.server.api.ebank.domain.enums;
 
 public enum AccountType {
     CA,

@@ -1,10 +1,10 @@
-package com.server.api.ebank.entity;
+package com.server.api.ebank.domain.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.server.api.ebank.entity.enums.Role;
+import com.server.api.ebank.domain.enums.Role;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,6 @@ public class User implements Serializable {
      * Timestamp indicating when the entity was created.
      */
     @Column(name = "created_at", nullable = false, updatable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     private String name;
@@ -43,7 +42,7 @@ public class User implements Serializable {
 
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role roles;
+    private Role role;
 
     @Column(name = "is_enabled")
     private boolean isEnabled;

@@ -1,4 +1,4 @@
-package com.server.api.ebank.entity;
+package com.server.api.ebank.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

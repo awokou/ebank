@@ -1,10 +1,10 @@
 package com.server.api.ebank.controller;
 
-import com.server.api.ebank.dto.CurrentAccountDto;
-import com.server.api.ebank.dto.OperationDto;
-import com.server.api.ebank.dto.SavingAccountDto;
-import com.server.api.ebank.dto.VirementDto;
-import com.server.api.ebank.entity.Operations;
+import com.server.api.ebank.domain.dto.request.CurrentAccountDto;
+import com.server.api.ebank.domain.dto.request.OperationDto;
+import com.server.api.ebank.domain.dto.request.SavingAccountDto;
+import com.server.api.ebank.domain.dto.request.VirementDto;
+import com.server.api.ebank.domain.entity.Operations;
 import com.server.api.ebank.service.AccountService;
 import com.server.api.ebank.service.OperationService;
 

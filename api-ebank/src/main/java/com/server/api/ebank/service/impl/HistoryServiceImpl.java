@@ -1,8 +1,8 @@
 package com.server.api.ebank.service.impl;
 
-import com.server.api.ebank.dto.HistoryResponse;
-import com.server.api.ebank.entity.History;
-import com.server.api.ebank.entity.User;
+import com.server.api.ebank.domain.dto.response.HistoryResponse;
+import com.server.api.ebank.domain.entity.History;
+import com.server.api.ebank.domain.entity.User;
 import com.server.api.ebank.repository.HistoryRepository;
 import com.server.api.ebank.service.HistoryService;
 

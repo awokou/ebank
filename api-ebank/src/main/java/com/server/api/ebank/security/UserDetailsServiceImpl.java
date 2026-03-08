@@ -1,6 +1,6 @@
 package com.server.api.ebank.security;
 
-import com.server.api.ebank.entity.User;
+import com.server.api.ebank.domain.entity.User;
 import com.server.api.ebank.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

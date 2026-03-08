@@ -1,8 +1,8 @@
 package com.server.api.ebank.service;
 
-import com.server.api.ebank.dto.CustomerDto;
-
 import java.util.List;
+
+import com.server.api.ebank.domain.dto.request.CustomerDto;
 
 public interface CustomerService {
 

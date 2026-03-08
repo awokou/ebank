@@ -1,10 +1,10 @@
 package com.server.api.ebank.service;
 
-import com.server.api.ebank.dto.LoginDto;
-import com.server.api.ebank.dto.UserDto;
-import com.server.api.ebank.dto.AuthResponse;
-
 import java.util.List;
+
+import com.server.api.ebank.domain.dto.request.LoginDto;
+import com.server.api.ebank.domain.dto.request.UserDto;
+import com.server.api.ebank.domain.dto.response.AuthResponse;
 
 public interface UserService {
 

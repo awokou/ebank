@@ -1,8 +1,9 @@
 package com.server.api.ebank.repository;
 
-import com.server.api.ebank.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+
+import com.server.api.ebank.domain.entity.Account;
 
 public interface AccountRepository extends JpaRepository<Account, Integer> {
 

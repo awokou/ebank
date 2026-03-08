@@ -1,4 +1,4 @@
-package com.server.api.ebank.dto;
+package com.server.api.ebank.domain.dto.response;
 
 import lombok.Data;
 

@@ -14,40 +14,36 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    @Value("${jwt.jwtSecret}")
+    @Value("${jwt.secret}")
     private String jwtSecret;
 
-    @Value("${jwt.jwtExpirationMs}")
-    private Long jwtExpirationMs;
+    @Value("${jwt.expiration}")
+    private Long jwtExpiration;
 
     public String generateJwtToken(Authentication authentication) {
 
-        String userPrincipal = authentication.getName();
+        String username = authentication.getName();
 
         return Jwts.builder()
-                .setSubject((userPrincipal))
+                .setSubject((username))
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date((new Date()).getTime() + jwtExpiration))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    private Key key() {
-        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
-    }
-
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parserBuilder().setSigningKey(key()).build()
-                .parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder()
-                    .setSigningKey(key())
-                    .build()
-                    .parseClaimsJws(token);
-
+            getUserNameFromJwtToken(token);
             return true;
 
         } catch (JwtException | IllegalArgumentException e) {
@@ -55,5 +51,9 @@ public class JwtUtils {
         }
 
         return false;
+    }
+
+    private Key key() {
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 }

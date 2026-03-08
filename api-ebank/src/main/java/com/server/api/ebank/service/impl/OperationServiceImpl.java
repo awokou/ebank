@@ -1,10 +1,10 @@
 package com.server.api.ebank.service.impl;
 
-import com.server.api.ebank.dto.OperationDto;
-import com.server.api.ebank.dto.VirementDto;
-import com.server.api.ebank.entity.*;
-import com.server.api.ebank.entity.enums.AccountType;
-import com.server.api.ebank.entity.enums.OperationType;
+import com.server.api.ebank.domain.dto.request.OperationDto;
+import com.server.api.ebank.domain.dto.request.VirementDto;
+import com.server.api.ebank.domain.entity.*;
+import com.server.api.ebank.domain.enums.AccountType;
+import com.server.api.ebank.domain.enums.OperationType;
 import com.server.api.ebank.exception.ResourceNotFoundException;
 import com.server.api.ebank.repository.AccountRepository;
 import com.server.api.ebank.repository.OperationRepository;

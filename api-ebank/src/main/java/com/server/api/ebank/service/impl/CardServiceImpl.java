@@ -1,9 +1,9 @@
 package com.server.api.ebank.service.impl;
 
-import com.server.api.ebank.dto.CardDto;
-import com.server.api.ebank.dto.UpdateCardDto;
-import com.server.api.ebank.entity.Card;
-import com.server.api.ebank.entity.Customer;
+import com.server.api.ebank.domain.dto.request.CardDto;
+import com.server.api.ebank.domain.dto.request.UpdateCardDto;
+import com.server.api.ebank.domain.entity.Card;
+import com.server.api.ebank.domain.entity.Customer;
 import com.server.api.ebank.exception.ResourceNotFoundException;
 import com.server.api.ebank.repository.CardRepository;
 import com.server.api.ebank.repository.CustomerRepository;

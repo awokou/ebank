@@ -1,8 +1,8 @@
 package com.server.api.ebank.service;
 
-import com.server.api.ebank.dto.OperationDto;
-import com.server.api.ebank.dto.VirementDto;
-import com.server.api.ebank.entity.Operations;
+import com.server.api.ebank.domain.dto.request.OperationDto;
+import com.server.api.ebank.domain.dto.request.VirementDto;
+import com.server.api.ebank.domain.entity.Operations;
 
 import java.util.List;
 

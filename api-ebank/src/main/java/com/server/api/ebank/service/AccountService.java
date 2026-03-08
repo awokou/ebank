@@ -1,7 +1,7 @@
 package com.server.api.ebank.service;
 
-import com.server.api.ebank.dto.CurrentAccountDto;
-import com.server.api.ebank.dto.SavingAccountDto;
+import com.server.api.ebank.domain.dto.request.CurrentAccountDto;
+import com.server.api.ebank.domain.dto.request.SavingAccountDto;
 
 public interface AccountService {
 

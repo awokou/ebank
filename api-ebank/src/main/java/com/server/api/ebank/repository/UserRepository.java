@@ -1,7 +1,8 @@
 package com.server.api.ebank.repository;
 
-import com.server.api.ebank.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.server.api.ebank.domain.entity.User;
 
 import java.util.Optional;
 

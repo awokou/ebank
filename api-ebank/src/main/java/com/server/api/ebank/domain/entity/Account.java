@@ -1,7 +1,8 @@
-package com.server.api.ebank.entity;
+package com.server.api.ebank.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.server.api.ebank.entity.enums.AccountStatus;
+import com.server.api.ebank.domain.enums.AccountStatus;
+
 import jakarta.persistence.*;
 import lombok.Data;
 

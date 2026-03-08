@@ -1,12 +1,12 @@
-package com.server.api.ebank.entity;
+package com.server.api.ebank.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.server.api.ebank.domain.enums.OperationType;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import com.server.api.ebank.entity.enums.OperationType;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

@@ -1,7 +1,7 @@
 package com.server.api.ebank.controller;
 
-import com.server.api.ebank.dto.CardDto;
-import com.server.api.ebank.dto.UpdateCardDto;
+import com.server.api.ebank.domain.dto.request.CardDto;
+import com.server.api.ebank.domain.dto.request.UpdateCardDto;
 import com.server.api.ebank.service.CardService;
 
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.server.api.ebank.dto;
+package com.server.api.ebank.domain.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,5 +13,5 @@ public class UserDto {
     private String name;
     private String email;
     private String password;
-    private String roles;
+    private String role;
 }

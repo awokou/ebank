@@ -1,6 +1,7 @@
-package com.server.api.ebank.dto;
+package com.server.api.ebank.domain.dto.request;
 
-import com.server.api.ebank.entity.enums.AccountStatus;
+import com.server.api.ebank.domain.enums.AccountStatus;
+
 import lombok.Data;
 
 @Data

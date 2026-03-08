@@ -1,14 +1,14 @@
 package com.server.api.ebank.service.impl;
 
-import com.server.api.ebank.entity.RefreshToken;
-import com.server.api.ebank.entity.enums.Role;
-import com.server.api.ebank.entity.enums.TokenType;
 import com.server.api.ebank.repository.RefreshTokenRepository;
 import com.server.api.ebank.service.HistoryService;
-import com.server.api.ebank.dto.LoginDto;
-import com.server.api.ebank.dto.UserDto;
-import com.server.api.ebank.dto.AuthResponse;
-import com.server.api.ebank.entity.User;
+import com.server.api.ebank.domain.dto.request.LoginDto;
+import com.server.api.ebank.domain.dto.request.UserDto;
+import com.server.api.ebank.domain.dto.response.AuthResponse;
+import com.server.api.ebank.domain.entity.RefreshToken;
+import com.server.api.ebank.domain.entity.User;
+import com.server.api.ebank.domain.enums.Role;
+import com.server.api.ebank.domain.enums.TokenType;
 import com.server.api.ebank.exception.AlreadyExistException;
 import com.server.api.ebank.exception.ResourceNotFoundException;
 import com.server.api.ebank.repository.UserRepository;
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
                 .refreshToken(refreshToken.getToken())
                 .name(user.getName())
                 .email(user.getEmail())
-                .roles(user.getRoles().name())
+                .role(user.getRole().name())
                 .tokenType(TokenType.BEARER.name())
                 .build();
     }
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setName(userDto.getName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRoles(Role.ADMIN);
+        user.setRole(Role.ADMIN);
 
         User userSaved = userRepository.save(user);
         createRefreshToken(userSaved.getEmail());
@@ -111,9 +111,9 @@ public class UserServiceImpl implements UserService {
 
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        user.setRoles(Role.valueOf(userDto.getRoles()));
+        user.setRole(Role.valueOf(userDto.getRole()));
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        
+
         userRepository.save(user);
 
         return userDto;
@@ -128,11 +128,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email : " + email));
 
-        long refreshTokenValidity = 30L * 1000;
-
         RefreshToken refreshToken = RefreshToken.builder()
                 .token(UUID.randomUUID().toString())
-                .expiryDate(Instant.now().plusMillis(refreshTokenValidity))
+                .expiryDate(Instant.now().plusMillis(30L * 1000))
                 .revoked(false)
                 .user(user)
                 .build();
@@ -152,7 +150,7 @@ public class UserServiceImpl implements UserService {
         userDto.setId(user.getId());
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
-        userDto.setRoles(user.getRoles().name());
+        userDto.setRole(user.getRole().name());
 
         return userDto;
     }

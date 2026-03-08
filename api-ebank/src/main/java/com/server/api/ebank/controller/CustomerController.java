@@ -1,7 +1,7 @@
 package com.server.api.ebank.controller;
 
-import com.server.api.ebank.dto.CustomerDto;
-import com.server.api.ebank.entity.Customer;
+import com.server.api.ebank.domain.dto.request.CustomerDto;
+import com.server.api.ebank.domain.entity.Customer;
 import com.server.api.ebank.service.CustomerService;
 
 import io.swagger.v3.oas.annotations.Operation;

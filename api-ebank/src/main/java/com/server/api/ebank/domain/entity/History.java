@@ -1,4 +1,4 @@
-package com.server.api.ebank.entity;
+package com.server.api.ebank.domain.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -9,14 +9,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.validation.constraints.*;
 
 @Data
 @Entity
-@Table(name = "customers")
+@Table(name = "history")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer implements Serializable {
+public class History implements Serializable {
 
     @Id
     @Column(name = "id", nullable = false)
@@ -30,18 +29,11 @@ public class Customer implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
-    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "cin", unique = true)
-    private String cin;
-
-    @NotEmpty(message = "Email is required.")
-    @Email(message = "Valid email is required.")
-    @Column(name = "email", unique = true)
-    private String email;
-
-    private String address;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     /**
      * Method to set the creation timestamp before persisting the entity.
@@ -52,5 +44,4 @@ public class Customer implements Serializable {
             createdAt = LocalDateTime.now();
         }
     }
-
 }

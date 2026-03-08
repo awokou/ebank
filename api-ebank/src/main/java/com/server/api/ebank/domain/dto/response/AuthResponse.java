@@ -1,4 +1,4 @@
-package com.server.api.ebank.dto;
+package com.server.api.ebank.domain.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -11,7 +11,7 @@ public class AuthResponse {
     private Integer id;
     private String name;
     private String email;
-    private String roles;
+    private String role;
 
     @JsonProperty("access_token")
     private String accessToken;

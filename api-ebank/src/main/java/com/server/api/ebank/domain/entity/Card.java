@@ -1,4 +1,4 @@
-package com.server.api.ebank.entity;
+package com.server.api.ebank.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
