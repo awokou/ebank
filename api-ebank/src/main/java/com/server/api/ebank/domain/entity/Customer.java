@@ -2,9 +2,6 @@ package com.server.api.ebank.domain.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,16 +16,8 @@ import jakarta.validation.constraints.*;
 public class Customer implements Serializable {
 
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    /**
-     * Timestamp indicating when the entity was created.
-     */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -43,14 +32,17 @@ public class Customer implements Serializable {
 
     private String address;
 
-    /**
-     * Method to set the creation timestamp before persisting the entity.
-     */
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     @PrePersist
-    public void prePersist() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }

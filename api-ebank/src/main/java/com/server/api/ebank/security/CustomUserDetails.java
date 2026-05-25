@@ -35,7 +35,7 @@ public class CustomUserDetails implements UserDetails {
                 user.getName(),
                 user.getEmail(),
                 user.getPassword(),
-                user.isEnabled(),
+                user.isBlocked(),
                 authorities
         );
     }

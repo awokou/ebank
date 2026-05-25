@@ -1,11 +1,19 @@
 package com.server.api.ebank.service;
 
-import com.server.api.ebank.domain.dto.request.CurrentAccountDto;
-import com.server.api.ebank.domain.dto.request.SavingAccountDto;
+import com.server.api.ebank.domain.dto.request.AccountDto;
+import java.util.List;
 
 public interface AccountService {
 
-    CurrentAccountDto createCurrentAccount(CurrentAccountDto currentAccountDto);
+    AccountDto createAccount(AccountDto accountDto);
 
-    SavingAccountDto createSavingAccount(SavingAccountDto savingAccountDto);
+    AccountDto getAccountById(Integer id);
+
+    List<AccountDto> getAccountsByCustomerId(Integer customerId);
+
+    List<AccountDto> getAllAccounts();
+
+    AccountDto updateAccount(Integer id, AccountDto accountDto);
+
+    void deleteAccountById(Integer id);
 }

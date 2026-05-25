@@ -1,8 +1,7 @@
 package com.server.api.ebank.controller;
 
-import com.server.api.ebank.domain.dto.request.CurrentAccountDto;
 import com.server.api.ebank.domain.dto.request.OperationDto;
-import com.server.api.ebank.domain.dto.request.SavingAccountDto;
+import com.server.api.ebank.domain.dto.request.AccountDto;
 import com.server.api.ebank.domain.dto.request.VirementDto;
 import com.server.api.ebank.domain.entity.Operations;
 import com.server.api.ebank.service.AccountService;
@@ -26,18 +25,11 @@ public class AccountController {
     private final AccountService accountService;
     private final OperationService operationService;
 
-    @PostMapping("/current")
+    @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @Operation(summary = "Créer un compte courant")
-    public ResponseEntity<CurrentAccountDto> createCurrentAccount(@RequestBody CurrentAccountDto currentAccountDto) {
-        return ResponseEntity.ok(accountService.createCurrentAccount(currentAccountDto));
-    }
-
-    @PostMapping("/saving")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @Operation(summary = "Créer un compte épargne")
-    public ResponseEntity<SavingAccountDto> createSavingAccount(@RequestBody SavingAccountDto savingAccountDto) {
-        return ResponseEntity.ok(accountService.createSavingAccount(savingAccountDto));
+    @Operation(summary = "Créer un compte")
+    public ResponseEntity<AccountDto> createAccount(@RequestBody AccountDto accountDto) {
+        return ResponseEntity.ok(accountService.createAccount(accountDto));
     }
 
     @PostMapping("/credit")

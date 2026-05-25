@@ -16,14 +16,16 @@ import java.time.LocalDate;
 public class Card implements Serializable {
 
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "expiration_date", nullable = false)
+    private String cardNumber;
+    private String cardHolderName;
     private LocalDate expirationDate;
 
-    private boolean isEnabled;
+    @Column(nullable = false)
+    private boolean isBlocked;
+
     private boolean onlinePayment;
     private boolean internationalPayment;
     private boolean bypassed;
@@ -31,14 +33,4 @@ public class Card implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "fk_card_customer_id"), nullable = false)
     private Customer customer;
-
-    /**
-     * Method to set the expirationDate timestamp before persisting the entity.
-     */
-    @PrePersist
-    public void prePersist() {
-        if (expirationDate == null) {
-            expirationDate = LocalDate.now();
-        }
-    }
 }

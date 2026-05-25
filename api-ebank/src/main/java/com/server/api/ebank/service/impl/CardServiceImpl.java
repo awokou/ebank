@@ -28,6 +28,10 @@ public class CardServiceImpl implements CardService {
     public CardDto getCardByCustomerId(Integer id) {
 
         Card card = cardRepository.findByCustomerId(id);
+        if (card == null) {
+            throw new ResourceNotFoundException(
+                    String.format("Card for customer with ID %d not found", id));
+        }
 
         return mapToCardDto(card);
     }
@@ -41,25 +45,29 @@ public class CardServiceImpl implements CardService {
                         String.format("Customer with ID %d not found", cardDto.getCustomerId())));
 
         Card card = new Card();
-        card.setEnabled(true);
+        card.setBlocked(false);
         card.setBypassed(false);
         card.setOnlinePayment(false);
         card.setInternationalPayment(false);
         card.setExpirationDate(LocalDate.now().plusYears(4));
         card.setCustomer(customer);
-        
-        cardRepository.save(card);
 
-        return cardDto;
+        Card savedCard = cardRepository.save(card);
+
+        return mapToCardDto(savedCard);
     }
 
     @Override
     @Transactional
     public CardDto setEnabled(UpdateCardDto updateCardDto) {
-        
+
         Card card = cardRepository.findByCustomerId(updateCardDto.getCustomerId());
-        card.setEnabled(updateCardDto.isValue());
-        
+        if (card == null) {
+            throw new ResourceNotFoundException(
+                    String.format("Card for customer with ID %d not found", updateCardDto.getCustomerId()));
+        }
+        card.setBlocked(!updateCardDto.isValue());
+
         cardRepository.save(card);
 
         return mapToCardDto(card);
@@ -68,10 +76,14 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public CardDto setOnlinePayment(UpdateCardDto updateCardDto) {
-        
+
         Card card = cardRepository.findByCustomerId(updateCardDto.getCustomerId());
+        if (card == null) {
+            throw new ResourceNotFoundException(
+                    String.format("Card for customer with ID %d not found", updateCardDto.getCustomerId()));
+        }
         card.setOnlinePayment(updateCardDto.isValue());
-        
+
         cardRepository.save(card);
 
         return mapToCardDto(card);
@@ -80,10 +92,14 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public CardDto setByPass(UpdateCardDto updateCardDto) {
-        
+
         Card card = cardRepository.findByCustomerId(updateCardDto.getCustomerId());
+        if (card == null) {
+            throw new ResourceNotFoundException(
+                    String.format("Card for customer with ID %d not found", updateCardDto.getCustomerId()));
+        }
         card.setBypassed(updateCardDto.isValue());
-        
+
         cardRepository.save(card);
 
         return mapToCardDto(card);
@@ -92,10 +108,14 @@ public class CardServiceImpl implements CardService {
     @Override
     @Transactional
     public CardDto setInternationalPayment(UpdateCardDto updateCardDto) {
-       
+
         Card card = cardRepository.findByCustomerId(updateCardDto.getCustomerId());
+        if (card == null) {
+            throw new ResourceNotFoundException(
+                    String.format("Card for customer with ID %d not found", updateCardDto.getCustomerId()));
+        }
         card.setInternationalPayment(updateCardDto.isValue());
-        
+
         cardRepository.save(card);
 
         return mapToCardDto(card);
@@ -104,18 +124,20 @@ public class CardServiceImpl implements CardService {
     /**
      * Map Card entity to CardDto.
      *
-     * @param card the taxe entity
+     * @param card the card entity
      * @return the card data transfer object
      */
     private CardDto mapToCardDto(Card card) {
 
         CardDto cardDto = new CardDto();
         cardDto.setId(card.getId());
-        cardDto.setEnabled(true);
-        cardDto.setOnlinePayment(false);
-        cardDto.setInternationalPayment(false);
-        cardDto.setBypassed(false);
+        cardDto.setEnabled(!card.isBlocked());
+        cardDto.setOnlinePayment(card.isOnlinePayment());
+        cardDto.setInternationalPayment(card.isInternationalPayment());
+        cardDto.setBypassed(card.isBypassed());
+        cardDto.setCustomerId(card.getCustomer().getId());
 
         return cardDto;
     }
 }
+

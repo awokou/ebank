@@ -1,10 +1,8 @@
 package com.server.api.ebank.service.impl;
 
-import com.server.api.ebank.domain.dto.request.CurrentAccountDto;
-import com.server.api.ebank.domain.dto.request.SavingAccountDto;
-import com.server.api.ebank.domain.entity.CurrentAccount;
+import com.server.api.ebank.domain.dto.request.AccountDto;
+import com.server.api.ebank.domain.entity.Account;
 import com.server.api.ebank.domain.entity.Customer;
-import com.server.api.ebank.domain.entity.SavingAccount;
 import com.server.api.ebank.domain.enums.AccountStatus;
 import com.server.api.ebank.exception.ResourceNotFoundException;
 import com.server.api.ebank.repository.AccountRepository;
@@ -12,6 +10,7 @@ import com.server.api.ebank.repository.CustomerRepository;
 import com.server.api.ebank.service.AccountService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import java.util.*;
 
 import org.springframework.stereotype.Service;
 
@@ -21,38 +20,69 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final CustomerRepository customerRepository;
+    private static final Random random = new Random();
 
     @Override
     @Transactional
-    public CurrentAccountDto createCurrentAccount(CurrentAccountDto currentAccountDto) {
+    public AccountDto createAccount(AccountDto accountDto) {
         // Recherche du client
-        Customer customer = customerRepository.findById(currentAccountDto.getCustomerId())
+        Customer customer = customerRepository.findById(accountDto.getCustomerId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        String.format("Customer with ID %d not found", currentAccountDto.getCustomerId())));
-        CurrentAccount currentAccount = new CurrentAccount();
-        currentAccount.setDecisievert(currentAccountDto.getDecouvert());
-        currentAccount.setBalance(currentAccountDto.getBalance());
-        currentAccount.setStatus(AccountStatus.CREATED);
-        currentAccount.setCustomer(customer);
-        accountRepository.save(currentAccount);
+                        String.format("Customer with ID %d not found", accountDto.getCustomerId())));
 
-        return currentAccountDto;
+        Account saving = new Account();
+        saving.setAccountNumber(generateIBAN());
+        saving.setBalance(accountDto.getBalance());
+        saving.setCurrency(accountDto.getCurrency());
+        saving.setDecisievert(accountDto.getDecisievert());
+        saving.setStatus(AccountStatus.CREATED);
+        saving.setCustomer(customer);
+
+        accountRepository.save(saving);
+
+        return accountDto;
     }
 
     @Override
-    @Transactional
-    public SavingAccountDto createSavingAccount(SavingAccountDto savingAccountDto) {
-        // Recherche du client
-        Customer customer = customerRepository.findById(savingAccountDto.getCustomerId())
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        String.format("Customer with ID %d not found", savingAccountDto.getCustomerId())));
-        SavingAccount saving = new SavingAccount();
-        saving.setInterestRate(savingAccountDto.getInterestRate());
-        saving.setBalance(savingAccountDto.getBalance());
-        saving.setStatus(AccountStatus.CREATED);
-        saving.setCustomer(customer);
-        accountRepository.save(saving);
+    public AccountDto getAccountById(Integer id) {
+        return null;
+    }
 
-        return savingAccountDto;
+    @Override
+    public List<AccountDto> getAccountsByCustomerId(Integer customerId) {
+        return List.of();
+    }
+
+    @Override
+    public List<AccountDto> getAllAccounts() {
+        return List.of();
+    }
+
+    @Override
+    public AccountDto updateAccount(Integer id, AccountDto accountDto) {
+        return null;
+    }
+
+    @Override
+    public void deleteAccountById(Integer id) {
+
+    }
+
+    /**
+     * Generates a random International Bank Account Number (IBAN).
+     *
+     * @return The generated IBAN.
+     */
+    public static String generateIBAN() {
+        String[] countryCodes = Locale.getISOCountries();
+        int index = random.nextInt(countryCodes.length);
+        String countryCode = countryCodes[index];
+        String accountNumber = String.format("%02d-%04d-%04d-%04d-%04d",
+                random.nextInt(100),
+                random.nextInt(10000),
+                random.nextInt(10000),
+                random.nextInt(10000),
+                random.nextInt(10000));
+        return countryCode + accountNumber;
     }
 }

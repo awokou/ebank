@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -27,35 +28,26 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public boolean debit(OperationDto operationDto) {
-        if (AccountType.CA.name().equals(operationDto.getAccountType())) {
-            CurrentAccount currentAccount = (CurrentAccount) accountRepository.findById(operationDto.getAccountId())
-                    .orElse(null);
-            if (currentAccount != null && currentAccount.getBalance() >= operationDto.getAmount()) {
-                currentAccount.setBalance(currentAccount.getBalance() - operationDto.getAmount());
-                accountRepository.save(currentAccount);
-            }
-        }
-
-        // Handle savings accounts
-        if (AccountType.SA.name().equals(operationDto.getAccountType())) {
-            SavingAccount savingAccount = (SavingAccount) accountRepository.findById(operationDto.getAccountId())
-                    .orElse(null);
-            if (savingAccount != null && savingAccount.getBalance() >= operationDto.getAmount()) {
-                savingAccount.setBalance(savingAccount.getBalance() - operationDto.getAmount());
-                accountRepository.save(savingAccount);
-            }
-        }
-
         // Récupérer le compte et vérifier son existence
         Account account = accountRepository.findById(operationDto.getAccountId())
                 .orElseThrow(() -> new ResourceNotFoundException(
                         String.format("Account with ID %s not found", operationDto.getAccountId())));
 
-        // Create the operation
+        // Vérifier le solde suffisant
+        BigDecimal amount = BigDecimal.valueOf(operationDto.getAmount());
+        if (account.getBalance().compareTo(amount) < 0) {
+            return false;
+        }
+
+        // Effectuer le débit
+        account.setBalance(account.getBalance().subtract(amount));
+        accountRepository.save(account);
+
+        // Créer l'opération
         Operations operation = new Operations();
         operation.setAccount(account);
         operation.setType(OperationType.DEBIT);
-        operation.setAmount(operationDto.getAmount());
+        operation.setAmount(amount);
         operation.setFavorite(operationDto.isFavorite());
         operation.setDescription(operationDto.getDescription());
         operation.setLibel(operationDto.getLibele());
@@ -67,37 +59,22 @@ public class OperationServiceImpl implements OperationService {
 
     @Override
     public boolean credit(OperationDto operationDto) {
-        if (AccountType.CA.name().equals(operationDto.getAccountType())) {
-            CurrentAccount currentAccount = (CurrentAccount) accountRepository
-                    .findById(operationDto.getAccountId()).orElse(null);
-            if (currentAccount != null) {
-                currentAccount.setBalance(currentAccount.getBalance() + operationDto.getAmount());
-                accountRepository.save(currentAccount);
-            } else {
-                return false;
-            }
-        }
-
-        if (AccountType.SA.name().equals(operationDto.getAccountType())) {
-            SavingAccount savingAccount = (SavingAccount) accountRepository
-                    .findById(operationDto.getAccountId()).orElse(null);
-            if (savingAccount != null) {
-                savingAccount.setBalance(savingAccount.getBalance() + operationDto.getAmount());
-                accountRepository.save(savingAccount);
-            } else {
-                return false;
-            }
-        }
         // Récupérer le compte et vérifier son existence
         Account account = accountRepository.findById(operationDto.getAccountId())
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
                                 String.format("Account with ID %s not found", operationDto.getAccountId())));
 
+        // Effectuer le crédit
+        BigDecimal amount = BigDecimal.valueOf(operationDto.getAmount());
+        account.setBalance(account.getBalance().add(amount));
+        accountRepository.save(account);
+
+        // Créer l'opération
         Operations operation = new Operations();
         operation.setAccount(account);
         operation.setType(OperationType.CREDIT);
-        operation.setAmount(operationDto.getAmount());
+        operation.setAmount(amount);
         operation.setFavorite(operationDto.isFavorite());
         operation.setDescription(operationDto.getDescription());
         operation.setLibel(operationDto.getLibele());
@@ -124,10 +101,7 @@ public class OperationServiceImpl implements OperationService {
         debitOpt.setFavorite(virementDto.isFavorite());
         debitOpt.setLibele(virementDto.getLibel());
 
-        credit(creditOpt);
-        debit(debitOpt);
-
-        return true;
+        return debit(debitOpt) && credit(creditOpt);
     }
 
     @Override
@@ -141,15 +115,13 @@ public class OperationServiceImpl implements OperationService {
 
         OperationDto debitOpt = new OperationDto();
         debitOpt.setAccountId(virementDto.getAccountSender());
-        debitOpt.setAccountType(AccountType.SA.name());
+        debitOpt.setAccountType(AccountType.CA.name());
         debitOpt.setAmount(virementDto.getAmount());
         debitOpt.setDescription(virementDto.getDescription());
         debitOpt.setFavorite(virementDto.isFavorite());
+        debitOpt.setLibele(virementDto.getLibel());
 
-        credit(creditOpt);
-        debit(debitOpt);
-
-        return true;
+        return debit(debitOpt) && credit(creditOpt);
     }
 
     @Override
@@ -167,11 +139,9 @@ public class OperationServiceImpl implements OperationService {
         debitOpt.setAmount(virementDto.getAmount());
         debitOpt.setDescription(virementDto.getDescription());
         debitOpt.setFavorite(virementDto.isFavorite());
+        debitOpt.setLibele(virementDto.getLibel());
 
-        credit(creditOpt);
-        debit(debitOpt);
-
-        return true;
+        return debit(debitOpt) && credit(creditOpt);
     }
 
     @Override

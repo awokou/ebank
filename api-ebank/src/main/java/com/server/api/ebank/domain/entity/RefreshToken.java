@@ -1,6 +1,5 @@
 package com.server.api.ebank.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,11 +19,9 @@ import java.time.Instant;
 public class RefreshToken implements Serializable {
 
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "expiry_date", nullable = false)
     private Instant expiryDate;
 

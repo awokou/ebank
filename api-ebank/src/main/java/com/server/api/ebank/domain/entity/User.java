@@ -13,21 +13,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Table(name = "users")
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "users")
 public class User implements Serializable {
 
     @Id
-    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
-    /**
-     * Timestamp indicating when the entity was created.
-     */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 
     private String name;
 
@@ -40,20 +33,24 @@ public class User implements Serializable {
     @Size(min = 8, message = "Password must be at least 8 characters long")
     private String password;
 
-    @Column(name = "role", nullable = false)
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "is_enabled")
-    private boolean isEnabled;
+    @Column(nullable = false)
+    private boolean isBlocked;
 
-    /**
-     * Method to set the creation timestamp before persisting the entity.
-     */
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
     @PrePersist
-    public void prePersist() {
-        if (createdAt == null) {
-            createdAt = LocalDateTime.now();
-        }
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

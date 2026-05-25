@@ -1,35 +1,52 @@
 package com.server.api.ebank.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.server.api.ebank.domain.enums.AccountStatus;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Currency;
 
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "TYPE", length = 2)
+@Table(name = "accounts")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Account implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    /**
-     * Timestamp indicating when the entity was created.
-     */
-    @Column(name = "created_at", nullable = false, updatable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
+    @Column(nullable = false, unique = true)
+    private String accountNumber;
+
+    @Column(nullable = false)
+    private BigDecimal balance;
+
+    @Column(nullable = false)
+    private Currency currency;
+
+    @Column(nullable = false)
+    private BigDecimal decisievert;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private AccountStatus status;
+
+    @Column(nullable = false)
+    private boolean isBlocked;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", foreignKey = @ForeignKey(name = "fk_account_customer_id"), nullable = false)
     private Customer customer;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
