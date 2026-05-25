@@ -3,6 +3,7 @@ package com.server.api.ebank.domain.entity;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import com.server.api.ebank.domain.enums.Gender;
 import com.server.api.ebank.domain.enums.Role;
 
 import jakarta.persistence.*;
@@ -39,6 +40,13 @@ public class User implements Serializable {
 
     @Column(nullable = false)
     private boolean isBlocked;
+
+    @NotBlank
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = false)
+    private Gender gender;
+
+    private String phoneNumber;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

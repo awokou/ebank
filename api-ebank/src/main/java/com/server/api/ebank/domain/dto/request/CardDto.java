@@ -4,9 +4,8 @@ import lombok.Data;
 
 @Data
 public class CardDto {
-
     private Integer id;
-    private boolean isEnabled;
+    private boolean isBlocked;
     private boolean onlinePayment;
     private boolean internationalPayment;
     private boolean bypassed;

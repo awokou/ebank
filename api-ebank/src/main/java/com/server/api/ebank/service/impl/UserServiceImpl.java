@@ -78,6 +78,8 @@ public class UserServiceImpl implements UserService {
         user.setName(userDto.getName());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setRole(Role.ADMIN);
+        user.setGender(userDto.getGender());
+        user.setPhoneNumber(userDto.getPhoneNumber());
 
         User userSaved = userRepository.save(user);
         createRefreshToken(userSaved.getEmail());
@@ -113,6 +115,8 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setRole(Role.valueOf(userDto.getRole()));
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setGender(userDto.getGender());
+        user.setPhoneNumber(userDto.getPhoneNumber());
 
         userRepository.save(user);
 
@@ -145,13 +149,14 @@ public class UserServiceImpl implements UserService {
      * @return the user data transfer object
      */
     private UserDto mapToUserDto(User user) {
-
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
         userDto.setRole(user.getRole().name());
-
+        userDto.setPassword(user.getPassword());
+        userDto.setGender(user.getGender());
+        userDto.setPhoneNumber(user.getPhoneNumber());
         return userDto;
     }
 }

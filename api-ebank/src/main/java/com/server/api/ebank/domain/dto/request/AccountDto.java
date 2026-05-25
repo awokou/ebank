@@ -9,12 +9,10 @@ import java.util.Currency;
 
 @Data
 public class AccountDto {
-
     private String accountNumber;
     private BigDecimal balance;
     private Currency currency;
     private BigDecimal decisievert;
-
     private AccountStatus status;
     private Integer customerId;
 }

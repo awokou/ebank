@@ -33,6 +33,10 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setEmail(customerDto.getEmail());
         customer.setCin(customerDto.getCin());
         customer.setAddress(customerDto.getAddress());
+        customer.setBirthDate(customerDto.getBirthDate());
+        customer.setGender(customerDto.getGender());
+        customer.setPhoneNumber(customerDto.getPhoneNumber());
+        customer.setBirthDate(customerDto.getBirthDate());
 
         customerRepository.save(customer);
        
@@ -43,17 +47,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     public CustomerDto findByCIN(String cin) {
         var customer = customerRepository.findByCin(cin);
-
         if (customer == null) {
             throw new ResourceNotFoundException("Customer with CIN " + cin + " not found");
         }
-
         CustomerDto customerDto = new CustomerDto();
         customerDto.setId(customer.getId());
         customerDto.setName(customer.getName());
         customerDto.setEmail(customer.getEmail());
         customerDto.setCin(customer.getCin());
         customerDto.setAddress(customer.getAddress());
+        customerDto.setPhoneNumber(customer.getPhoneNumber());
+        customerDto.setBirthDate(customer.getBirthDate());
+        customerDto.setGender(customer.getGender());
 
         return customerDto;
     }
@@ -79,6 +84,9 @@ public class CustomerServiceImpl implements CustomerService {
         customerDto.setEmail(customer.getEmail());
         customerDto.setCin(customer.getCin());
         customerDto.setAddress(customer.getAddress());
+        customerDto.setPhoneNumber(customer.getPhoneNumber());
+        customerDto.setBirthDate(customer.getBirthDate());
+        customerDto.setGender(customer.getGender());
         customerRepository.save(customer);
         return mapToCustomerDto(customer);
     }
@@ -99,14 +107,15 @@ public class CustomerServiceImpl implements CustomerService {
      * @return the customer data transfer object
      */
     private CustomerDto mapToCustomerDto(Customer customer) {
-
         CustomerDto customerDto = new CustomerDto();
         customerDto.setId(customer.getId());
         customerDto.setName(customer.getName());
         customerDto.setCin(customer.getCin());
         customerDto.setEmail(customer.getEmail());
         customerDto.setAddress(customer.getAddress());
-
+        customerDto.setPhoneNumber(customer.getPhoneNumber());
+        customerDto.setBirthDate(customer.getBirthDate());
+        customerDto.setGender(customer.getGender());
         return customerDto;
     }
 }

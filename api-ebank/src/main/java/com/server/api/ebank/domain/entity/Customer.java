@@ -1,7 +1,10 @@
 package com.server.api.ebank.domain.entity;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import com.server.api.ebank.domain.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +32,20 @@ public class Customer implements Serializable {
     @Email(message = "Valid email is required.")
     @Column(name = "email", unique = true)
     private String email;
+
+    @NotBlank
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = false)
+    private Gender gender;
+
+    @NotBlank
+    @Column(name = "phone_number", nullable = false)
+    private String phoneNumber;
+
+    @Past
+    @Column(name = "birth_date", nullable = false)
+    @NotBlank
+    private LocalDate birthDate;
 
     private String address;
 

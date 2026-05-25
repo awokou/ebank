@@ -1,5 +1,6 @@
 package com.server.api.ebank.domain.dto.request;
 
+import com.server.api.ebank.domain.enums.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,10 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-
     private Integer id;
     private String name;
     private String email;
     private String password;
     private String role;
+    private Gender gender;
+    private String phoneNumber;
 }

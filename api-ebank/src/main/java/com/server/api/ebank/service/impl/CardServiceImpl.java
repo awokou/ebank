@@ -131,7 +131,7 @@ public class CardServiceImpl implements CardService {
 
         CardDto cardDto = new CardDto();
         cardDto.setId(card.getId());
-        cardDto.setEnabled(!card.isBlocked());
+        cardDto.setBlocked(!card.isBlocked());
         cardDto.setOnlinePayment(card.isOnlinePayment());
         cardDto.setInternationalPayment(card.isInternationalPayment());
         cardDto.setBypassed(card.isBypassed());
