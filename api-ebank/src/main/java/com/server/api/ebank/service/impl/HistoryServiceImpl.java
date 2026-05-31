@@ -46,12 +46,10 @@ public class HistoryServiceImpl implements HistoryService {
      * @return the history response object
      */
     private HistoryResponse mapToHistoriqueResponse(History history) {
-
         HistoryResponse response = new HistoryResponse();
         response.setId(history.getId());
         response.setName(history.getName());
         response.setUser(history.getUser().getName());
-
         return response;
     }
 }

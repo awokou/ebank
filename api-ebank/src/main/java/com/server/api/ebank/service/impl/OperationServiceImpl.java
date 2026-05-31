@@ -1,10 +1,8 @@
 package com.server.api.ebank.service.impl;
 
 import com.server.api.ebank.domain.dto.request.OperationDto;
-import com.server.api.ebank.domain.dto.request.VirementDto;
 import com.server.api.ebank.domain.entity.*;
 import com.server.api.ebank.domain.enums.AccountType;
-import com.server.api.ebank.domain.enums.OperationType;
 import com.server.api.ebank.exception.ResourceNotFoundException;
 import com.server.api.ebank.repository.AccountRepository;
 import com.server.api.ebank.repository.OperationRepository;
@@ -34,7 +32,7 @@ public class OperationServiceImpl implements OperationService {
                         String.format("Account with ID %s not found", operationDto.getAccountId())));
 
         // Vérifier le solde suffisant
-        BigDecimal amount = BigDecimal.valueOf(operationDto.getAmount());
+        BigDecimal amount = operationDto.getAmount();
         if (account.getBalance().compareTo(amount) < 0) {
             return false;
         }
@@ -46,11 +44,11 @@ public class OperationServiceImpl implements OperationService {
         // Créer l'opération
         Operations operation = new Operations();
         operation.setAccount(account);
-        operation.setType(OperationType.DEBIT);
+        operation.setType(AccountType.DEBIT);
         operation.setAmount(amount);
         operation.setFavorite(operationDto.isFavorite());
         operation.setDescription(operationDto.getDescription());
-        operation.setLibel(operationDto.getLibele());
+        operation.setLibel(operationDto.getLibel());
 
         operationRepository.save(operation);
 
@@ -66,18 +64,18 @@ public class OperationServiceImpl implements OperationService {
                                 String.format("Account with ID %s not found", operationDto.getAccountId())));
 
         // Effectuer le crédit
-        BigDecimal amount = BigDecimal.valueOf(operationDto.getAmount());
+        BigDecimal amount = operationDto.getAmount();
         account.setBalance(account.getBalance().add(amount));
         accountRepository.save(account);
 
         // Créer l'opération
         Operations operation = new Operations();
         operation.setAccount(account);
-        operation.setType(OperationType.CREDIT);
+        operation.setType(AccountType.CREDIT);
         operation.setAmount(amount);
         operation.setFavorite(operationDto.isFavorite());
         operation.setDescription(operationDto.getDescription());
-        operation.setLibel(operationDto.getLibele());
+        operation.setLibel(operationDto.getLibel());
 
         operationRepository.save(operation);
 
@@ -85,79 +83,9 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
-    public boolean transfer(VirementDto virementDto) {
-
-        OperationDto creditOpt = new OperationDto();
-        creditOpt.setAccountId(virementDto.getAccountReceiver());
-        creditOpt.setAccountType(AccountType.CA.name());
-        creditOpt.setAmount(virementDto.getAmount());
-        creditOpt.setDescription(virementDto.getDescription());
-
-        OperationDto debitOpt = new OperationDto();
-        debitOpt.setAccountId(virementDto.getAccountSender());
-        debitOpt.setAccountType(AccountType.CA.name());
-        debitOpt.setAmount(virementDto.getAmount());
-        debitOpt.setDescription(virementDto.getDescription());
-        debitOpt.setFavorite(virementDto.isFavorite());
-        debitOpt.setLibele(virementDto.getLibel());
-
-        return debit(debitOpt) && credit(creditOpt);
-    }
-
-    @Override
-    public boolean transferToSaving(VirementDto virementDto) {
-
-        OperationDto creditOpt = new OperationDto();
-        creditOpt.setAccountId(virementDto.getAccountReceiver());
-        creditOpt.setAccountType(AccountType.SA.name());
-        creditOpt.setAmount(virementDto.getAmount());
-        creditOpt.setDescription(virementDto.getDescription());
-
-        OperationDto debitOpt = new OperationDto();
-        debitOpt.setAccountId(virementDto.getAccountSender());
-        debitOpt.setAccountType(AccountType.CA.name());
-        debitOpt.setAmount(virementDto.getAmount());
-        debitOpt.setDescription(virementDto.getDescription());
-        debitOpt.setFavorite(virementDto.isFavorite());
-        debitOpt.setLibele(virementDto.getLibel());
-
-        return debit(debitOpt) && credit(creditOpt);
-    }
-
-    @Override
-    public boolean transferToCurrent(VirementDto virementDto) {
-
-        OperationDto creditOpt = new OperationDto();
-        creditOpt.setAccountId(virementDto.getAccountReceiver());
-        creditOpt.setAccountType(AccountType.CA.name());
-        creditOpt.setAmount(virementDto.getAmount());
-        creditOpt.setDescription(virementDto.getDescription());
-
-        OperationDto debitOpt = new OperationDto();
-        debitOpt.setAccountId(virementDto.getAccountSender());
-        debitOpt.setAccountType(AccountType.SA.name());
-        debitOpt.setAmount(virementDto.getAmount());
-        debitOpt.setDescription(virementDto.getDescription());
-        debitOpt.setFavorite(virementDto.isFavorite());
-        debitOpt.setLibele(virementDto.getLibel());
-
-        return debit(debitOpt) && credit(creditOpt);
-    }
-
-    @Override
     public List<Operations> getOperationsByAccountId(Integer accountId) {
         return operationRepository.findByAccountIdOrderByIdDesc(accountId)
                 .stream()
                 .toList();
-    }
-
-    @Override
-    public List<Operations> favoriteOperation(Integer accountId) {
-        return null;
-    }
-
-    @Override
-    public Operations oneFavoriteOperation(Integer id) {
-        return operationRepository.oneFavoriteOperation(id);
     }
 }

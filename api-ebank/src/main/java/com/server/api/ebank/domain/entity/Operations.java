@@ -1,7 +1,6 @@
 package com.server.api.ebank.domain.entity;
 
-import com.server.api.ebank.domain.enums.OperationType;
-
+import com.server.api.ebank.domain.enums.AccountType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,7 +23,7 @@ public class Operations implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OperationType type;
+    private AccountType type;
 
     @Column(nullable = false)
     private BigDecimal amount;

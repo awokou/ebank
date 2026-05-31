@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
         saving.setBalance(accountDto.getBalance());
         saving.setCurrency(accountDto.getCurrency());
         saving.setDecisievert(accountDto.getDecisievert());
-        saving.setStatus(AccountStatus.CREATED);
+        saving.setStatus(AccountStatus.ACTIVE);
         saving.setCustomer(customer);
 
         accountRepository.save(saving);

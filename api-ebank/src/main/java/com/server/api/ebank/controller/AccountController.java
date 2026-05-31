@@ -2,7 +2,6 @@ package com.server.api.ebank.controller;
 
 import com.server.api.ebank.domain.dto.request.OperationDto;
 import com.server.api.ebank.domain.dto.request.AccountDto;
-import com.server.api.ebank.domain.dto.request.VirementDto;
 import com.server.api.ebank.domain.entity.Operations;
 import com.server.api.ebank.service.AccountService;
 import com.server.api.ebank.service.OperationService;
@@ -46,41 +45,9 @@ public class AccountController {
         return ResponseEntity.ok(operationService.debit(operationDto));
     }
 
-    @PostMapping("/transfer")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @Operation(summary = "Effectuer un virement entre comptes")
-    public ResponseEntity<Boolean> transfer(@RequestBody VirementDto virementDto) {
-        return ResponseEntity.ok(operationService.transfer(virementDto));
-    }
-
-    @PostMapping("/transferToSaving")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<Boolean> transferToSaving(@RequestBody VirementDto virementDto) {
-        return ResponseEntity.ok(operationService.transferToSaving(virementDto));
-    }
-
-    @PostMapping("/transferToCurrent")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<Boolean> transferToCurrent(@RequestBody VirementDto virementDto) {
-        return ResponseEntity.ok(operationService.transferToCurrent(virementDto));
-    }
-
     @GetMapping("/operations/{accountId}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public ResponseEntity<List<Operations>> getOperationsByAccountId(@PathVariable Integer accountId) {
         return ResponseEntity.ok(operationService.getOperationsByAccountId(accountId));
-    }
-
-    @GetMapping("/operations/favorite/{accountId}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @Operation(summary = "Récupérer les opérations favorites d'un compte")
-    public ResponseEntity<List<Operations>> getFavoriteOperations(@PathVariable Integer accountId) {
-        return ResponseEntity.ok(operationService.favoriteOperation(accountId));
-    }
-
-    @GetMapping("/operations/onefavorite/{id}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    public ResponseEntity<Operations> oneFavoriteOperation(@PathVariable Integer id) {
-        return ResponseEntity.ok(operationService.oneFavoriteOperation(id));
     }
 }
