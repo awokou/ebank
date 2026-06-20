@@ -9,7 +9,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.validation.constraints.*;
 
 @Data
 @Entity
@@ -28,23 +27,17 @@ public class Customer implements Serializable {
     @Column(name = "cin", unique = true)
     private String cin;
 
-    @NotEmpty(message = "Email is required.")
-    @Email(message = "Valid email is required.")
     @Column(name = "email", unique = true)
     private String email;
 
-    @NotBlank
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false)
     private Gender gender;
 
-    @NotBlank
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @Past
     @Column(name = "birth_date", nullable = false)
-    @NotBlank
     private LocalDate birthDate;
 
     private String address;

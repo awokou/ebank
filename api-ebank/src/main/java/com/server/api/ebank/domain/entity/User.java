@@ -7,7 +7,6 @@ import com.server.api.ebank.domain.enums.Gender;
 import com.server.api.ebank.domain.enums.Role;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,15 +22,13 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @NotEmpty(message = "Email is required.")
-    @Email(message = "Valid email is required.")
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @NotEmpty(message = "Password is required.")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @Column(nullable = false)
@@ -41,7 +38,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private boolean isBlocked;
 
-    @NotBlank
+
     @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false)
     private Gender gender;
