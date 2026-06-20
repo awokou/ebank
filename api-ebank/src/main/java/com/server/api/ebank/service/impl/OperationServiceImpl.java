@@ -27,12 +27,12 @@ public class OperationServiceImpl implements OperationService {
     @Override
     public boolean debit(OperationDto operationDto) {
         // Récupérer le compte et vérifier son existence
-        Account account = accountRepository.findById(operationDto.getAccountId())
+        Account account = accountRepository.findById(operationDto.accountId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        String.format("Account with ID %s not found", operationDto.getAccountId())));
+                        String.format("Account with ID %s not found", operationDto.accountId())));
 
         // Vérifier le solde suffisant
-        BigDecimal amount = operationDto.getAmount();
+        BigDecimal amount = operationDto.amount();
         if (account.getBalance().compareTo(amount) < 0) {
             return false;
         }
@@ -46,9 +46,9 @@ public class OperationServiceImpl implements OperationService {
         operation.setAccount(account);
         operation.setType(AccountType.DEBIT);
         operation.setAmount(amount);
-        operation.setFavorite(operationDto.isFavorite());
-        operation.setDescription(operationDto.getDescription());
-        operation.setLibel(operationDto.getLibel());
+        operation.setFavorite(operationDto.favorite());
+        operation.setDescription(operationDto.description());
+        operation.setLibel(operationDto.libel());
 
         operationRepository.save(operation);
 
@@ -58,13 +58,13 @@ public class OperationServiceImpl implements OperationService {
     @Override
     public boolean credit(OperationDto operationDto) {
         // Récupérer le compte et vérifier son existence
-        Account account = accountRepository.findById(operationDto.getAccountId())
+        Account account = accountRepository.findById(operationDto.accountId())
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
-                                String.format("Account with ID %s not found", operationDto.getAccountId())));
+                                String.format("Account with ID %s not found", operationDto.accountId())));
 
         // Effectuer le crédit
-        BigDecimal amount = operationDto.getAmount();
+        BigDecimal amount = operationDto.amount();
         account.setBalance(account.getBalance().add(amount));
         accountRepository.save(account);
 
@@ -73,9 +73,9 @@ public class OperationServiceImpl implements OperationService {
         operation.setAccount(account);
         operation.setType(AccountType.CREDIT);
         operation.setAmount(amount);
-        operation.setFavorite(operationDto.isFavorite());
-        operation.setDescription(operationDto.getDescription());
-        operation.setLibel(operationDto.getLibel());
+        operation.setFavorite(operationDto.favorite());
+        operation.setDescription(operationDto.description());
+        operation.setLibel(operationDto.libel());
 
         operationRepository.save(operation);
 

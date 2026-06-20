@@ -34,10 +34,14 @@ class AccountServiceTest {
     @Test
     void testCreateSavingAccount_Success() {
         // Arrange
-        AccountDto accountDto = new AccountDto();
-        accountDto.setDecisievert(BigDecimal.valueOf(500.0));
-        accountDto.setBalance(BigDecimal.valueOf(1000.0));
-        accountDto.setCustomerId(1);
+        AccountDto accountDto = new AccountDto(
+                null,
+                BigDecimal.valueOf(1000.0),
+                null,
+                BigDecimal.valueOf(500.0),
+                null,
+                1
+        );
 
         Customer customer = new Customer();
         customer.setId(1);
@@ -49,17 +53,21 @@ class AccountServiceTest {
         // Assert
         verify(accountRepository, times(1)).save(any(Account.class));
         assertNotNull(result);
-        assertEquals(500.0, result.getDecisievert());
-        assertEquals(1000.0, result.getBalance());
+        assertEquals(500.0, result.decisievert().doubleValue());
+        assertEquals(1000.0, result.balance().doubleValue());
     }
 
     @Test
     void testCreateAccount_CustomerNotFound() {
         // Arrange
-        AccountDto currentAccountDto = new AccountDto();
-        currentAccountDto.setDecisievert(BigDecimal.valueOf(500.0));
-        currentAccountDto.setBalance(BigDecimal.valueOf(1000.0));
-        currentAccountDto.setCustomerId(1);
+        AccountDto currentAccountDto = new AccountDto(
+                null,
+                BigDecimal.valueOf(1000.0),
+                null,
+                BigDecimal.valueOf(500.0),
+                null,
+                1
+        );
 
         when(customerRepository.findById(1)).thenReturn(Optional.empty());
 

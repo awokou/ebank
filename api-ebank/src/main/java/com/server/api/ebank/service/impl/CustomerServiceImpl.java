@@ -23,20 +23,20 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public CustomerDto createCustomer(CustomerDto customerDto) {
-        if (customerRepository.existsByCin(customerDto.getCin())) {
+        if (customerRepository.existsByCin(customerDto.cin())) {
             // Message clair et uniforme pour les tests
             throw new AlreadyExistException(
-                    String.format("Customer with CIN %s is already in use", customerDto.getCin()));
+                    String.format("Customer with CIN %s is already in use", customerDto.cin()));
         }
         Customer customer = new Customer();
-        customer.setName(customerDto.getName());
-        customer.setEmail(customerDto.getEmail());
-        customer.setCin(customerDto.getCin());
-        customer.setAddress(customerDto.getAddress());
-        customer.setBirthDate(customerDto.getBirthDate());
-        customer.setGender(customerDto.getGender());
-        customer.setPhoneNumber(customerDto.getPhoneNumber());
-        customer.setBirthDate(customerDto.getBirthDate());
+        customer.setName(customerDto.name());
+        customer.setEmail(customerDto.email());
+        customer.setCin(customerDto.cin());
+        customer.setAddress(customerDto.address());
+        customer.setBirthDate(customerDto.birthDate());
+        customer.setGender(customerDto.gender());
+        customer.setPhoneNumber(customerDto.phoneNumber());
+        customer.setBirthDate(customerDto.birthDate());
 
         customerRepository.save(customer);
        
@@ -50,17 +50,16 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer == null) {
             throw new ResourceNotFoundException("Customer with CIN " + cin + " not found");
         }
-        CustomerDto customerDto = new CustomerDto();
-        customerDto.setId(customer.getId());
-        customerDto.setName(customer.getName());
-        customerDto.setEmail(customer.getEmail());
-        customerDto.setCin(customer.getCin());
-        customerDto.setAddress(customer.getAddress());
-        customerDto.setPhoneNumber(customer.getPhoneNumber());
-        customerDto.setBirthDate(customer.getBirthDate());
-        customerDto.setGender(customer.getGender());
-
-        return customerDto;
+        return new CustomerDto(
+                customer.getId(),
+                customer.getName(),
+                customer.getCin(),
+                customer.getEmail(),
+                customer.getAddress(),
+                customer.getGender(),
+                customer.getPhoneNumber(),
+                customer.getBirthDate()
+        );
     }
 
     @Override
@@ -80,13 +79,13 @@ public class CustomerServiceImpl implements CustomerService {
                 .orElseThrow(() -> new ResourceNotFoundException("Customer is not exists with given id:" + id));
 
         // Update the customer entity with values from customerDto
-        customerDto.setName(customer.getName());
-        customerDto.setEmail(customer.getEmail());
-        customerDto.setCin(customer.getCin());
-        customerDto.setAddress(customer.getAddress());
-        customerDto.setPhoneNumber(customer.getPhoneNumber());
-        customerDto.setBirthDate(customer.getBirthDate());
-        customerDto.setGender(customer.getGender());
+        customer.setName(customerDto.name());
+        customer.setEmail(customerDto.email());
+        customer.setCin(customerDto.cin());
+        customer.setAddress(customerDto.address());
+        customer.setPhoneNumber(customerDto.phoneNumber());
+        customer.setBirthDate(customerDto.birthDate());
+        customer.setGender(customerDto.gender());
         customerRepository.save(customer);
         return mapToCustomerDto(customer);
     }
@@ -107,15 +106,15 @@ public class CustomerServiceImpl implements CustomerService {
      * @return the customer data transfer object
      */
     private CustomerDto mapToCustomerDto(Customer customer) {
-        CustomerDto customerDto = new CustomerDto();
-        customerDto.setId(customer.getId());
-        customerDto.setName(customer.getName());
-        customerDto.setCin(customer.getCin());
-        customerDto.setEmail(customer.getEmail());
-        customerDto.setAddress(customer.getAddress());
-        customerDto.setPhoneNumber(customer.getPhoneNumber());
-        customerDto.setBirthDate(customer.getBirthDate());
-        customerDto.setGender(customer.getGender());
-        return customerDto;
+        return new CustomerDto(
+                customer.getId(),
+                customer.getName(),
+                customer.getCin(),
+                customer.getEmail(),
+                customer.getAddress(),
+                customer.getGender(),
+                customer.getPhoneNumber(),
+                customer.getBirthDate()
+        );
     }
 }

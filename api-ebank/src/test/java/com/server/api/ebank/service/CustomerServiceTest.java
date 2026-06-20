@@ -32,11 +32,16 @@ class CustomerServiceTest {
 
     @Test
     void testCreateCustomer() {
-        CustomerDto customerDto = new CustomerDto();
-        customerDto.setName("John Doe");
-        customerDto.setEmail("john.doe@example.com");
-        customerDto.setCin("123456789");
-        customerDto.setAddress("123 Main St");
+        CustomerDto customerDto = new CustomerDto(
+                null,
+                "John Doe",
+                "123456789",
+                "john.doe@example.com",
+                "123 Main St",
+                null,
+                null,
+                null
+        );
 
         Customer customer = new Customer();
         customer.setName("John Doe");
@@ -44,7 +49,7 @@ class CustomerServiceTest {
         customer.setCin("123456789");
         customer.setAddress("123 Main St");
 
-        when(customerRepository.existsByCin(customerDto.getCin())).thenReturn(false);
+        when(customerRepository.existsByCin(customerDto.cin())).thenReturn(false);
         when(customerRepository.save(any(Customer.class))).thenAnswer(invocation -> {
             Customer saved = invocation.getArgument(0);
             saved.setId(1);
@@ -54,15 +59,23 @@ class CustomerServiceTest {
         CustomerDto result = customerService.createCustomer(customerDto);
 
         assertNotNull(result);
-        assertEquals("John Doe", result.getName());
-        assertEquals("123456789", result.getCin());
+        assertEquals("John Doe", result.name());
+        assertEquals("123456789", result.cin());
         verify(customerRepository).save(any(Customer.class));
     }
 
     @Test
     void testCreateCustomer_AlreadyExists() {
-        CustomerDto customerDto = new CustomerDto();
-        customerDto.setCin("123456789");
+        CustomerDto customerDto = new CustomerDto(
+                null,
+                null,
+                "123456789",
+                null,
+                null,
+                null,
+                null,
+                null
+        );
 
         when(customerRepository.existsByCin("123456789")).thenReturn(true);
 
@@ -87,17 +100,22 @@ class CustomerServiceTest {
 
         List<CustomerDto> result = customerService.getAllCustomers();
         assertEquals(1, result.size());
-        assertEquals("Awokou Mathieu", result.get(0).getName());
+        assertEquals("Awokou Mathieu", result.get(0).name());
     }
 
     @Test
     void testUpdateCustomer() {
         Integer id = 1;
-        CustomerDto customerDto = new CustomerDto();
-        customerDto.setName("John Doe");
-        customerDto.setEmail("john.doe@example.com");
-        customerDto.setCin("123456789");
-        customerDto.setAddress("123 Main St");
+        CustomerDto customerDto = new CustomerDto(
+                null,
+                "John Doe",
+                "123456789",
+                "john.doe@example.com",
+                "123 Main St",
+                null,
+                null,
+                null
+        );
 
         Customer customer = new Customer();
         customer.setId(id);
@@ -114,14 +132,23 @@ class CustomerServiceTest {
         CustomerDto updatedCustomer = customerService.updateCustomer(id, customerDto);
 
         assertNotNull(updatedCustomer);
-        assertEquals("John Doe", updatedCustomer.getName());
+        assertEquals("John Doe", updatedCustomer.name());
         verify(customerRepository).save(any(Customer.class));
     }
 
     @Test
     void testCustomerNotFound() {
         Integer id = 1;
-        CustomerDto customerDto = new CustomerDto();
+        CustomerDto customerDto = new CustomerDto(
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
         when(customerRepository.findById(id)).thenReturn(Optional.empty());
 
         ResourceNotFoundException exception = assertThrows(
@@ -143,13 +170,6 @@ class CustomerServiceTest {
         customer.setCin(cin);
         customer.setAddress("123 Street");
 
-        CustomerDto expectedDto = new CustomerDto();
-        expectedDto.setId(1);
-        expectedDto.setName("John Doe");
-        expectedDto.setEmail("john@example.com");
-        expectedDto.setCin(cin);
-        expectedDto.setAddress("123 Street");
-
         // Le repository renvoie l'entité Customer
         when(customerRepository.findByCin(cin)).thenReturn(customer);
 
@@ -158,9 +178,9 @@ class CustomerServiceTest {
 
         // Assert
         assertNotNull(customerDto);
-        assertEquals("John Doe", customerDto.getName());
-        assertEquals(cin, customerDto.getCin());
-        assertEquals("123 Street", customerDto.getAddress());
+        assertEquals("John Doe", customerDto.name());
+        assertEquals(cin, customerDto.cin());
+        assertEquals("123 Street", customerDto.address());
     }
 
     @Test

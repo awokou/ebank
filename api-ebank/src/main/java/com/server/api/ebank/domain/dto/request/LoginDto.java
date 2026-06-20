@@ -1,14 +1,11 @@
 package com.server.api.ebank.domain.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
 
-@Data
-public class LoginDto {
+public record LoginDto(
+        @NotBlank(message = "Email is required")
+        String email,
 
-    @NotBlank(message = "Email is required")
-    private String email;
-
-    @NotBlank(message = "Password is required")
-    private String password;
-}
+        @NotBlank(message = "Password is required")
+        String password
+) {}

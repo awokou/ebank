@@ -26,15 +26,15 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public AccountDto createAccount(AccountDto accountDto) {
         // Recherche du client
-        Customer customer = customerRepository.findById(accountDto.getCustomerId())
+        Customer customer = customerRepository.findById(accountDto.customerId())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        String.format("Customer with ID %d not found", accountDto.getCustomerId())));
+                        String.format("Customer with ID %d not found", accountDto.customerId())));
 
         Account saving = new Account();
         saving.setAccountNumber(generateIBAN());
-        saving.setBalance(accountDto.getBalance());
-        saving.setCurrency(accountDto.getCurrency());
-        saving.setDecisievert(accountDto.getDecisievert());
+        saving.setBalance(accountDto.balance());
+        saving.setCurrency(accountDto.currency());
+        saving.setDecisievert(accountDto.decisievert());
         saving.setStatus(AccountStatus.ACTIVE);
         saving.setCustomer(customer);
 

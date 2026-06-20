@@ -44,15 +44,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public AuthResponse authenticate(LoginDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginDto.email(), loginDto.password()));
         //
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtUtils.generateJwtToken(authentication);
 
-        User user = userRepository.findByEmail(loginDto.getEmail())
+        User user = userRepository.findByEmail(loginDto.email())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        var refreshToken = createRefreshToken(loginDto.getEmail());
+        var refreshToken = createRefreshToken(loginDto.email());
 
         historyService.saveHistory(user, "Connecté  " + user.getName());
 
@@ -69,17 +69,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto saveUser(UserDto userDto) {
-        boolean userExists = userRepository.existsByEmail(userDto.getEmail());
+        boolean userExists = userRepository.existsByEmail(userDto.email());
         if (userExists) {
-            throw new AlreadyExistException("Email %s is already in use" + userDto.getEmail());
+            throw new AlreadyExistException("Email %s is already in use" + userDto.email());
         }
         User user = new User();
-        user.setEmail(userDto.getEmail());
-        user.setName(userDto.getName());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setEmail(userDto.email());
+        user.setName(userDto.name());
+        user.setPassword(passwordEncoder.encode(userDto.password()));
         user.setRole(Role.ADMIN);
-        user.setGender(userDto.getGender());
-        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setGender(userDto.gender());
+        user.setPhoneNumber(userDto.phoneNumber());
 
         User userSaved = userRepository.save(user);
         createRefreshToken(userSaved.getEmail());
@@ -111,12 +111,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User is not exists with given id:" + id));
 
-        user.setName(userDto.getName());
-        user.setEmail(userDto.getEmail());
-        user.setRole(Role.valueOf(userDto.getRole()));
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setGender(userDto.getGender());
-        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setName(userDto.name());
+        user.setEmail(userDto.email());
+        user.setRole(Role.valueOf(userDto.role()));
+        user.setPassword(passwordEncoder.encode(userDto.password()));
+        user.setGender(userDto.gender());
+        user.setPhoneNumber(userDto.phoneNumber());
 
         userRepository.save(user);
 
@@ -149,14 +149,14 @@ public class UserServiceImpl implements UserService {
      * @return the user data transfer object
      */
     private UserDto mapToUserDto(User user) {
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setEmail(user.getEmail());
-        userDto.setRole(user.getRole().name());
-        userDto.setPassword(user.getPassword());
-        userDto.setGender(user.getGender());
-        userDto.setPhoneNumber(user.getPhoneNumber());
-        return userDto;
+        return new UserDto(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole().name(),
+                user.getGender(),
+                user.getPhoneNumber()
+        );
     }
 }

@@ -2,34 +2,26 @@ package com.server.api.ebank.domain.dto.request;
 
 import com.server.api.ebank.domain.enums.Gender;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserDto {
+public record UserDto(
+        Integer id,
 
-    private Integer id;
+        @NotBlank(message = "Name is required.")
+        String name,
 
-    @NotBlank(message = "Name is required.")
-    private String name;
+        @NotEmpty(message = "Email is required.")
+        @Email(message = "Valid email is required.")
+        String email,
 
-    @NotEmpty(message = "Email is required.")
-    @Email(message = "Valid email is required.")
-    private String email;
+        @NotBlank(message = "Password is required.")
+        @Size(min = 8, message = "Password must be at least 8 characters long")
+        String password,
 
-    @NotBlank(message = "Password is required.")
-    @Size(min = 8, message = "Password must be at least 8 characters long")
-    private String password;
+        @NotNull(message = "Role is required.")
+        String role,
 
-    @NotNull(message = "Role is required.")
-    private String role;
+        @NotNull(message = "Gender is required.")
+        Gender gender,
 
-    @NotBlank(message = "Gender is required.")
-    private Gender gender;
-
-
-    private String phoneNumber;
-}
+        String phoneNumber
+) {}
